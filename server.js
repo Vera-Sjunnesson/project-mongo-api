@@ -24,14 +24,6 @@ const listEndPoints = require('express-list-endpoints');
 
 const { Schema } = mongoose;
 
-/* const userSchema = new Schema ({
-  name: String,
-  age: Number,
-  alive: Boolean
-});
-
-const User = mongoose.model("User", userSchema);
- */
 const a24MoviesSchema = new Schema({
   id: Number,
   title: String,

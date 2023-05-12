@@ -81,7 +81,6 @@ app.use((req, res, next) => {
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send(process.env.API_KEY)
   res.json(listEndPoints(app));
 });
 

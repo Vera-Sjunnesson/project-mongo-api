@@ -12,8 +12,6 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise;
 
 // Defines the port the app will run on. Defaults to 8080, but can be overridden
-// when starting the server. Example command to overwrite PORT env variable value:
-// PORT=9000 npm start
 const port = process.env.PORT || 8080;
 const app = express();
 
@@ -32,6 +30,7 @@ app.use(cors());
 app.use(express.json());
 const listEndPoints = require('express-list-endpoints');
 
+// Schema/Model for A24 studio movies
 const { Schema } = mongoose;
 
 const a24MoviesSchema = new Schema({
@@ -61,7 +60,7 @@ const a24MoviesSchema = new Schema({
 
 const A24Movies = mongoose.model("A24Movies", a24MoviesSchema);
 
-
+// Resetting database
 if(process.env.RESET_DB) {
   const resetDatabase = async () => {
     await A24Movies.deleteMany()
@@ -71,29 +70,29 @@ if(process.env.RESET_DB) {
     })
   }
   resetDatabase();
-}
+};
 
+// Error message if database is not properly up and runnin
 app.use((req, res, next) => {
   if (mongoose.connection.readyState === 1) {
     next()
   } else {
     res.status(503).json({ error: 'Service unavailable' })
   }
-}
-)
+});
 
-// Start defining your routes here
+// Defining the route
 app.get("/", (req, res) => {
 
   const welcomeText = "Top movies from A24 Studio, one of the best movie studios in the world";
-  const apiEndPoints = "https://project-mongo-api-ozexcouyaq-lz.a.run.app";
-  const apiDocumentation = "https://project-mongo-api-ozexcouyaq-lz.a.run.app/api-docs/";
+  const deployedAPI = "https://project-mongo-api-ozexcouyaq-lz.a.run.app";
+  const apiDocumentation = "https://project-mongo-api-ozexcouyaq-lz.a.run.app/api-docs";
   const endpoints = (listEndPoints(app))
 
   res.send({
     body: {
       welcomeText,
-      apiEndPoints,
+      deployedAPI,
       apiDocumentation,
       endpoints
     }
@@ -103,9 +102,10 @@ app.get("/", (req, res) => {
 //Get all movies in the dataset with paging, query values are page, limit, director, imdb, producer, starring
 // Example: https://project-mongo-api-ozexcouyaq-lz.a.run.app/movies?page=1&limit=2&director=coppola
 app.get("/movies", async (req, res) => {
-  // destructure page and limit and set default values
+  // destructure page and limit and set default values + query for director, imdb, producer, starring
   const { page = 1, limit = 10, director, imdb, producer, starring } = req.query;
 
+  // Makes the query case insensitive with Regular Expression
   const directorRegex = new RegExp(director, 'i')
   const producerRegex = new RegExp(producer, 'i')
   const starringRegex = new RegExp(starring, 'i')
@@ -118,10 +118,10 @@ app.get("/movies", async (req, res) => {
       .skip((page - 1) * limit)
       .exec();
 
-    // get total documents in the Posts collection
+    // get total documents in the A24Movies collection
     const count = await A24Movies.countDocuments();
 
-     // return response with posts, total pages, and current page
+     // return response
     if (movieList.length > 0) {
       res.status(200).json({
         success: true,
@@ -205,10 +205,10 @@ app.get("/movies/score", async (req, res) => {
       }
     })
   }
-  });
+});
 
 
-// Get a movie by its title and director, query is director
+// Search for a movie by its title and director, query is director
 // Example: https://project-mongo-api-ozexcouyaq-lz.a.run.app/movies/aftersun
 app.get("/movies/:title", async (req, res) => {
   const singleTitle = req.params.title
@@ -267,7 +267,7 @@ app.get("/movies/id/:id", async (req, res) => {
       }
     })
   }
-  });
+});
 
 
 //Get a list of all the directors in the dataset
@@ -305,10 +305,10 @@ app.get("/directors", async (req, res) => {
       }
     })
   }
-  });
+});
 
 
-//Get movies by a specific director name
+//Get movie/movies by a specific director
 // Example: https://project-mongo-api-ozexcouyaq-lz.a.run.app/directors/glazer
 app.get("/directors/:name", async (req, res) => {
   const singleDirector = req.params.name;
@@ -358,7 +358,7 @@ app.get("/directors/:name", async (req, res) => {
       }
     })
   }
-  });
+});
 
 // Start the server
 app.listen(port, () => {

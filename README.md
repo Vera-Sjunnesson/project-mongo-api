@@ -43,7 +43,7 @@ Get movie/movies with a specific director name
 
 "/directors" - Get a list of all the directors in the dataset
 
-"/directors/:name" - Get movies/movie by a specific director name
+"/directors/:name" - Get movies/movie by a specific director
 
 # Data coming from:
 https://www.kaggle.com/datasets/sebastiansuliborski/a24-studio-movies-dataset

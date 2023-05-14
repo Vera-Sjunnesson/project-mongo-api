@@ -21,6 +21,12 @@ const app = express();
 const swaggerUi = require('swagger-ui-express'),
 swaggerDocument = require('./swagger.json');
 
+app.use(
+  '/api-docs',
+  swaggerUi.serve, 
+  swaggerUi.setup(swaggerDocument)
+);
+
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
@@ -80,12 +86,14 @@ app.use((req, res, next) => {
 app.get("/", (req, res) => {
 
   const welcomeText = "Top movies from A24 Studio, one of the best movie studios in the world";
-  const apiDocumentation = "https://project-mongo-api-ozexcouyaq-lz.a.run.app";
+  const apiEndPoints = "https://project-mongo-api-ozexcouyaq-lz.a.run.app";
+  const apiDocumentation = "https://project-mongo-api-ozexcouyaq-lz.a.run.app/api-docs/";
   const endpoints = (listEndPoints(app))
 
   res.send({
     body: {
       welcomeText,
+      apiEndPoints,
       apiDocumentation,
       endpoints
     }
@@ -351,12 +359,6 @@ app.get("/directors/:name", async (req, res) => {
     })
   }
   });
-
-app.use(
-  '/api-docs',
-  swaggerUi.serve, 
-  swaggerUi.setup(swaggerDocument)
-);
 
 // Start the server
 app.listen(port, () => {

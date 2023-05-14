@@ -5,7 +5,7 @@
       "title": "Top movies from A24 Studio",
       "description": "Top movies from A24 Studio, one of the best movie studios in the world"
     },
-    "host": "localhost:8000",
+    "host": "https://project-mongo-api-ozexcouyaq-lz.a.run.app/",
     "basePath": "/",
     "schemes": [
         "http"

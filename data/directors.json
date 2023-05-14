@@ -1,36 +1,36 @@
 [
     {
-        "id": 1,
+        "id": 0,
         "name": "Sofia Coppola",
         "directed_movies" : ["Priscilla", "The Bling Ring", "On the Rocks"]
     },
     {
-        "id": 2,
+        "id": 1,
         "name": "Alex Garland",
         "directed_movies" : ["Ex Machina", "Men", "Civil War"]
     },
     {
-        "id": 3,
+        "id": 2,
         "name": "Robert Eggers",
-        "directed_movies" : ["The Lighthouse", "Men", "Civil War"]
+        "directed_movies" : ["The Lighthouse", "Whitch"]
     },
     {
-        "id": 4,
+        "id": 3,
         "name": "Noah Baumbach",
         "directed_movies" : ["While We're Young", "De Palma", "White Noise"]
     },
     {
-        "id": 5,
+        "id": 4,
         "name": "Ari Aster",
         "directed_movies" : ["Hereditary", "Midsommar", "Beau Is Afraid"]
     },
     {
-        "id": 6,
+        "id": 5,
         "name": "Claire Denis",
         "directed_movies" : ["Stars at Noon", "High Life"]
     },
     {
-        "id": 7,
+        "id": 6,
         "name": "Yorgos Lanthimos",
         "directed_movies" : ["The Lobster", "The Killing of a Sacred Deer"]
     },

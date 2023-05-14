@@ -18,6 +18,8 @@ const port = process.env.PORT || 8080;
 const app = express();
 
 // Swagger for API documentation
+const swaggerUi = require('swagger-ui-express'),
+swaggerDocument = require('./swagger.json');
 
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
@@ -90,7 +92,8 @@ app.get("/", (req, res) => {
   });
 });
 
-//Get all songs in the dataset with paging, params are page and limit
+//Get all movies in the dataset with paging, query values are page, limit, director, imdb, producer, starring
+// Example: https://project-mongo-api-ozexcouyaq-lz.a.run.app/movies?page=1&limit=2&director=coppola
 app.get("/movies", async (req, res) => {
   // destructure page and limit and set default values
   const { page = 1, limit = 10, director, imdb, producer, starring } = req.query;
@@ -101,7 +104,7 @@ app.get("/movies", async (req, res) => {
   const imdbScorequery = { $gt: imdb ? imdb : 0 }
   try {
 
-    // execute query with page and limit values
+    // execute query with page, limit, director, imdb, producer, starring values
     const movieList = await A24Movies.find({ Directed_by: { $all: [directorRegex] }, Produced_by: { $all: [producerRegex] }, Starring: { $all: [starringRegex] }, imdb_score: imdbScorequery })
       .limit(limit * 1)
       .skip((page - 1) * limit)
@@ -133,12 +136,14 @@ app.get("/movies", async (req, res) => {
     res.status(500).json({
       success: false,
       body: {
-        message: "Invalid movie list"
+        message: "Internal Server Error"
       }
     })
   }
 });
 
+//Get all movies by scores from imdb, metascore and rotten tomatoes in descending order (except rotten tomatoes which provides an exact match), default is top 5 movies from imdb
+// Example: https://project-mongo-api-ozexcouyaq-lz.a.run.app/movies/score?rottentomatoes=80
 app.get("/movies/score", async (req, res) => {
   const { imdb, metascore, rottentomatoes } = req.query;
   const imdbScorequery = { $gt: imdb ? imdb : 0 }
@@ -172,7 +177,7 @@ app.get("/movies/score", async (req, res) => {
         body: scoredMovies
       })
     } else if (top5ImdbMovies.length > 0) {
-      res.status(200).json({
+      res.status(202).json({
         success: true,
         body: top5ImdbMovies
       })
@@ -188,15 +193,15 @@ app.get("/movies/score", async (req, res) => {
     res.status(500).json({
       success: false,
       body: {
-        message: "Invalid score list"
+        message: "Internal Server Error"
       }
     })
   }
   });
 
 
-
-// Get movies by title
+// Get a movie by its title and director, query is director
+// Example: https://project-mongo-api-ozexcouyaq-lz.a.run.app/movies/aftersun
 app.get("/movies/:title", async (req, res) => {
   const singleTitle = req.params.title
   const { director } = req.query;
@@ -222,14 +227,43 @@ app.get("/movies/:title", async (req, res) => {
       res.status(500).json({
         success: false,
         body: {
-          message: "Invalid movie title"
+          message: "Internal Server Error"
         }
       })
   }
 });
 
+// Get a movie by its ID
+// Example: https://project-mongo-api-ozexcouyaq-lz.a.run.app/movies/id/6460f888911f0284bb5abb93
+app.get("/movies/id/:id", async (req, res) => {
+  try {
+    const singleMovie = await A24Movies.findById(req.params.id);
+    if (singleMovie) {
+      res.status(200).json({
+        success: true,
+        body: singleMovie
+      })
+    } else {
+      res.status(404).json({
+        success: false,
+        body: {
+          message: "No movie with that id"
+        }
+      })
+    }
+  } catch(err) {
+    res.status(500).json({
+      success: false,
+      body: {
+        message: "Internal Server Error"
+      }
+    })
+  }
+  });
 
-//Get all directors in the json
+
+//Get a list of all the directors in the dataset
+// Example: https://project-mongo-api-ozexcouyaq-lz.a.run.app/directors
 app.get("/directors", async (req, res) => {
   try {
     const directorList = await A24Movies.find({}, { Directed_by: 1, _id: 0 });
@@ -259,13 +293,15 @@ app.get("/directors", async (req, res) => {
     res.status(500).json({
       success: false,
       body: {
-        message: "Invalid list of directors"
+        message: "Internal Server Error"
       }
     })
   }
   });
 
-  //Get movies by a specific director
+
+//Get movies by a specific director name
+// Example: https://project-mongo-api-ozexcouyaq-lz.a.run.app/directors/glazer
 app.get("/directors/:name", async (req, res) => {
   const singleDirector = req.params.name;
   const directorRegex = new RegExp(singleDirector, 'i')
@@ -310,37 +346,17 @@ app.get("/directors/:name", async (req, res) => {
     res.status(500).json({
       success: false,
       body: {
-        message: "Invalid director"
+        message: "Internal Server Error"
       }
     })
   }
   });
 
-app.get("/a24movies/id/:id", async (req, res) => {
-try {
-  const singleMovie = await A24Movies.findById(req.params.id);
-  if (singleMovie) {
-    res.status(200).json({
-      success: true,
-      body: singleMovie
-    })
-  } else {
-    res.status(404).json({
-      success: false,
-      body: {
-        message: "Movie not found"
-      }
-    })
-  }
-} catch(err) {
-  res.status(500).json({
-    success: false,
-    body: {
-      message: "Invalid movie id"
-    }
-  })
-}
-});
+app.use(
+  '/api-docs',
+  swaggerUi.serve, 
+  swaggerUi.setup(swaggerDocument)
+);
 
 // Start the server
 app.listen(port, () => {

@@ -1,0 +1,204 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "version": "1.0.0",
+      "title": "Top movies from A24 Studio",
+      "description": "Top movies from A24 Studio, one of the best movie studios in the world"
+    },
+    "host": "localhost:8000",
+    "basePath": "/",
+    "schemes": [
+        "http"
+    ],
+    "paths": {
+        "/": {
+          "get": {
+            "description": "",
+            "parameters": [],
+            "responses": {
+              "200": {
+                "description": "OK"
+              }
+            }
+          }
+        },
+        "/movies": {
+          "get": {
+            "description": "Get a list of all the movies seaprated into pages",
+            "parameters": [
+              {
+                "name": "page",
+                "in": "query",
+                "type": "number"
+              },
+              {
+                "name": "limit",
+                "in": "query",
+                "type": "number"
+              },
+              {
+                "name": "director",
+                "in": "query",
+                "type": "string"
+              },
+              {
+                "name": "imdb",
+                "in": "query",
+                "type": "number"
+              },
+              {
+                "name": "producer",
+                "in": "query",
+                "type": "string"
+              },
+              {
+                "name": "starring",
+                "in": "query",
+                "type": "string"
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "OK"
+              },
+              "404": {
+                "description": "No movies found in list"
+              },
+              "500": {
+                "description": "Internal Server Error"
+              }
+            }
+          }
+        },
+        "/movies/score": {
+          "get": {
+            "description": "Get all movies by scores from imdb, metascore and rotten tomatoes in descending order, default is top 5 movies from imdb",
+            "parameters": [
+                {
+                    "name": "imdb",
+                    "in": "query",
+                    "type": "number"
+                  },
+                  {
+                    "name": "metascore",
+                    "in": "query",
+                    "type": "number"
+                  },
+                  {
+                    "name": "rottentomatoes",
+                    "in": "query",
+                    "type": "number"
+                  }
+            ],
+            "responses": {
+              "200": {
+                "description": "OK"
+              },
+              "202": {
+                "description": "OK"
+              },
+              "404": {
+                "description": "Score list not found"
+              },
+              "500": {
+                "description": "Internal Server Error"
+              }
+            }
+          }
+        },
+        "/movies/{title}": {
+          "get": {
+            "description": "Search for a movie by its title and director",
+            "parameters": [
+              {
+                "name": "title",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "director",
+                "in": "query",
+                "type": "string"
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "OK"
+              },
+              "404": {
+                "description": "No movie with that title and director"
+              },
+              "500": {
+                "description": "Internal Server Error"
+              }
+            }
+          }
+        },
+        "/songs/id/{id}": {
+          "get": {
+            "description": "Get a movie by its ID",
+            "parameters": [
+              {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "OK"
+              },
+              "404": {
+                "description": "No movie with that id"
+              },
+              "500": {
+                "description": "Internal Server Error"
+              }
+            }
+          }
+        },
+        "/directors": {
+          "get": {
+            "description": "Get a list of all the artists mentioned",
+            "parameters": [],
+            "responses": {
+              "200": {
+                "description": "OK"
+              },
+              "404": {
+                "description": "List of directors not found"
+              },
+              "500": {
+                "description": "Internal Server Error"
+              }
+            }
+          }
+        },
+        "/directors/{name}": {
+          "get": {
+            "description": "Get songs by a specific artist",
+            "parameters": [
+              {
+                "name": "name",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "OK"
+              },
+              "404": {
+                "description": "No movies by director found"
+              },
+              "500": {
+                "description": "Internal Server Error"
+              }
+            }
+          }
+        }
+      }
+  }

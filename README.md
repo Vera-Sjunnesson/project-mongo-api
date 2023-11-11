@@ -6,7 +6,7 @@ This project is an API that provides data for 150 movies from A24 Studio. It was
 
 The problem was to set up MongoDB, store the data there and then to query that data from your API.
 
-The main challenge was to learn all the new mongoose syntax and familiarize with the mongoose methods.
+Learn the new mongoose syntax and methods.
 
 ## Technologies used:
 - Node.js

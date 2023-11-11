@@ -8,18 +8,17 @@ The problem was to set up MongoDB, store the data there and then to query that d
 
 The main challenge was to learn all the new mongoose syntax and familiarize with the mongoose methods.
 
-# Technologies used:
-Node.js
-Mongoose
-Express
-CORS
-JSON
-MongoDB
-HomeBrew
-Swagger
-Express List Endpoints
+## Technologies used:
+- Node.js/
+- Mongoose/
+- Express/
+- CORS/
+- JSON/
+- MongoDB/
+- Swagger/
+- Express List Endpoints
 
-# Features:
+## Features:
 Retrieve data from all 150 movies
 Limit the amount of pages and objects with page and limit query values
 Filter out movies assciated with a specific director, producer or/and actor
@@ -30,7 +29,7 @@ Get a movie by its ID
 Get a list of all the directors in the dataset
 Get movie/movies with a specific director name
 
-# Endpoints:
+## Endpoints:
 "/" - Defining the route with a welcome message and links
 
 "/movies" - Get all movies in the dataset with paging, query values are page, limit, director, imdb, producer, starring
@@ -45,7 +44,7 @@ Get movie/movies with a specific director name
 
 "/directors/:name" - Get movies/movie by a specific director
 
-# Data coming from:
+## Data coming from:
 https://www.kaggle.com/datasets/sebastiansuliborski/a24-studio-movies-dataset
 
 ## View it live

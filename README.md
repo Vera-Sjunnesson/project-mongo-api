@@ -9,13 +9,13 @@ The problem was to set up MongoDB, store the data there and then to query that d
 The main challenge was to learn all the new mongoose syntax and familiarize with the mongoose methods.
 
 ## Technologies used:
-- Node.js/
-- Mongoose/
-- Express/
-- CORS/
-- JSON/
-- MongoDB/
-- Swagger/
+- Node.js
+- Mongoose
+- Express
+- CORS
+- JSON
+- MongoDB
+- Swagger
 - Express List Endpoints
 
 ## Features:

@@ -11,7 +11,7 @@ Learn the new mongoose syntax and methods.
 ## Technologies used:
 - Node.js
 - Mongoose
-- Express
+- Express.js
 - CORS
 - JSON
 - MongoDB
